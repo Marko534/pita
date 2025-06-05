@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <!-- interface-name camera.ui -->
+  <requires lib="gtk" version="4.6" />
+  <object class="GtkApplicationWindow" id="main_window">
+    <property name="default-height">600</property>
+    <property name="default-width">800</property>
+    <property name="title">Raspberry Pi Camera</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">10</property>
+
+        <!-- Camera Preview Area -->
+        <child>
+          <object class="GtkPicture" id="camera_preview">
+            <property name="height-request">480</property>
+            <property name="width-request">640</property>
+            <property name="can-shrink">False</property>
+            <property name="content-fit">cover</property>
+          </object>
+        </child>
+
+        <!-- Controls Box -->
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">10</property>
+            <property name="margin-bottom">10</property>
+            <property name="margin-end">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-top">10</property>
+            <property name="halign">center</property>
+
+            <!-- Capture Button -->
+            <child>
+              <object class="GtkButton" id="capture_button">
+                <property name="icon-name">camera-photo-symbolic</property>
+                <property name="tooltip-text">Take Photo</property>
+                <property name="width-request">100</property>
+              </object>
+            </child>
+
+            <!-- Record Button -->
+            <child>
+              <object class="GtkButton" id="record_button">
+                <property name="icon-name">media-record-symbolic</property>
+                <property name="tooltip-text">Start/Stop Recording</property>
+                <property name="width-request">100</property>
+              </object>
+            </child>
+
+            <!-- Settings Button -->
+            <child>
+              <object class="GtkButton" id="settings_button">
+                <property name="icon-name">emblem-system-symbolic</property>
+                <property name="tooltip-text">Camera Settings</property>
+                <property name="width-request">100</property>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <!-- Status Bar -->
+        <child>
+          <object class="GtkStatusbar" id="status_bar">
+            <property name="margin-bottom">5</property>
+            <property name="margin-end">5</property>
+            <property name="margin-start">5</property>
+            <property name="margin-top">5</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
