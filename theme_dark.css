@@ -1,0 +1,98 @@
+
+/* Global Dark Theme */
+window {
+  background-color: #121212;
+  color: #E0E0E0;
+  font-family: Cantarell, sans-serif;
+  font-size: 16px;
+}
+
+/* Labels */
+label.title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #90CAF9;
+}
+
+label.mode-label {
+  font-size: 18px;
+  color: #90CAF9;
+}
+
+label.timer-display {
+  font-size: 28px;
+  font-weight: bold;
+  color: #FF6E6E;
+}
+
+/* Buttons */
+button.camera-control {
+  background-color: #1E88E5;
+  color: white;
+  border-radius: 100%;
+}
+
+button.camera-control:hover {
+  background-color: #42A5F5;
+}
+
+button.capture-button {
+  background-color: #E53935;
+  color: white;
+  border-radius: 100%;
+}
+
+button.capture-button:hover {
+  background-color: #D32F2F;
+}
+
+button.nav-button {
+  background-color: #3949AB;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+/* ComboBox Dropdowns */
+combobox {
+  background-color: #1E1E1E;
+  border: 1px solid #555;
+  color: #E0E0E0;
+}
+
+/* Slider/Scale */
+scale slider {
+  background-color: #1E88E5;
+  border-radius: 10px;
+}
+
+scale highlight {
+  background-color: #42A5F5;
+}
+
+/* Toggle Buttons */
+togglebutton {
+  background-color: #1E1E1E;
+  color: #E0E0E0;
+  border: 1px solid #444;
+}
+
+togglebutton:checked {
+  background-color: #43A047;
+  color: white;
+}
+
+/* GtkOverlay children (e.g., floating buttons) */
+.overlay-button {
+  background-color: #2E2E2E;
+  border-radius: 50%;
+}
+
+/* Scrollbar */
+scrollbar slider {
+  background-color: #555;
+}
+
+scrollbar trough {
+  background-color: #2C2C2C;
+}
