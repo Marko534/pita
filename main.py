@@ -14,20 +14,14 @@ class CameraApp(Adw.Application):
     def on_activate(self, app):
         # Load the UI file
         builder = Gtk.Builder()
-        builder.add_from_file("camera.ui")
+        builder.add_from_file("pi.ui")
 
         # Get the window from UI file
         self.window = builder.get_object("main_window")
         self.window.set_application(self)
 
-        # Connect signals
-        self.capture_button = builder.get_object("capture_button")
-        self.capture_button.connect("clicked", self.on_capture_clicked)
-
-        self.record_button = builder.get_object("record_button")
-        self.record_button.connect("clicked", self.on_record_clicked)
-
         self.window.present()
+        self.window.fullscreen()
 
     def on_capture_clicked(self, button):
         print("Capture button clicked")

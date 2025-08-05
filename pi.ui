@@ -51,9 +51,13 @@
                               <class name="osd"/>
                             </style>
                             <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">folder-pictures-symbolic</property>
-                                <property name="icon-size">large</property>
+                              <object class="GtkLabel" id="gallery_label">
+                                <property name="label"></property>  <!-- Camera emoji -->
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="32"/>  <!-- Adjust "24" for size -->
+                                </attributes>
                               </object>
                             </child>
                           </object>
@@ -83,7 +87,7 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="recording_time">
-                                <property name="text">00:00</property>
+                                <property name="label">00:00</property>
                               </object>
                             </child>
                           </object>
@@ -100,9 +104,13 @@
                               <class name="osd"/>
                             </style>
                             <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">preferences-system-symbolic</property>
-                                <property name="icon-size">large</property>
+                              <object class="GtkLabel" id="settings_lable">
+                                <property name="label"></property>  <!-- Camera emoji -->
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="32"/>  <!-- Adjust "24" for size -->
+                                </attributes>
                               </object>
                             </child>
                           </object>
@@ -120,25 +128,6 @@
                         <property name="margin-end">40</property>
                         <property name="halign">fill</property>
                         <property name="valign">end</property>
-                        
-                        <!-- Flash Toggle -->
-                        <child>
-                          <object class="GtkToggleButton" id="flash_btn">
-                            <property name="width-request">50</property>
-                            <property name="height-request">50</property>
-                            <property name="halign">start</property>
-                            <style>
-                              <class name="circular"/>
-                              <class name="osd"/>
-                            </style>
-                            <child>
-                              <object class="GtkImage" id="flash_icon">
-                                <property name="icon-name">weather-clear-symbolic</property>
-                                <property name="icon-size">normal</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                         
                         <!-- Spacer -->
                         <child>
@@ -159,9 +148,13 @@
                               <class name="osd"/>
                             </style>
                             <child>
-                              <object class="GtkImage" id="capture_icon">
-                                <property name="icon-name">camera-photo-symbolic</property>
-                                <property name="icon-size">large</property>
+                              <object class="GtkLabel" id="capture_label">
+                                <property name="label">󰄄</property>  <!-- Camera emoji -->
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="32"/>  <!-- Adjust "24" for size -->
+                                </attributes>
                               </object>
                             </child>
                           </object>
@@ -185,9 +178,13 @@
                               <class name="osd"/>
                             </style>
                             <child>
-                              <object class="GtkImage" id="mode_icon">
-                                <property name="icon-name">camera-video-symbolic</property>
-                                <property name="icon-size">normal</property>
+                              <object class="GtkLabel" id="mode_label">
+                                <property name="label">󰸚</property>  <!-- Camera emoji -->
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="32"/>  <!-- Adjust "24" for size -->
+                                </attributes>
                               </object>
                             </child>
                           </object>
@@ -211,7 +208,7 @@
                     <child>
                       <object class="GtkHeaderBar" id="gallery_header">
                         <child type="title"><object class="GtkLabel">
-                            <property name="text">Gallery</property>
+                            <property name="label">Gallery</property>
                             <style>
                               <class name="title"/>
                             </style>
@@ -373,7 +370,7 @@
                     <child>
                       <object class="GtkHeaderBar" id="settings_header">
                         <child type="title"><object class="GtkLabel">
-                            <property name="text">Settings</property>
+                            <property name="label">Settings</property>
                             <style>
                               <class name="title"/>
                             </style>
@@ -399,7 +396,7 @@
                           <object class="GtkNotebookPage">
                             <property name="tab">
                               <object class="GtkLabel">
-                                <property name="text">Camera</property>
+                                <property name="label">Camera</property>
                               </object>
                             </property>
                             <property name="child">
@@ -421,7 +418,7 @@
                                         <property name="spacing">8</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Resolution</property>
+                                            <property name="label">Resolution</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -453,7 +450,7 @@
                                         <property name="spacing">8</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Brightness</property>
+                                            <property name="label">Brightness</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -486,7 +483,7 @@
                                         <property name="spacing">8</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Contrast</property>
+                                            <property name="label">Contrast</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -519,7 +516,7 @@
                                         <property name="spacing">8</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Flip</property>
+                                            <property name="label">Flip</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -568,7 +565,7 @@
                                         <property name="spacing">8</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Filter</property>
+                                            <property name="label">Filter</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -606,7 +603,7 @@
                           <object class="GtkNotebookPage">
                             <property name="tab">
                               <object class="GtkLabel">
-                                <property name="text">General</property>
+                                <property name="label">General</property>
                               </object>
                             </property>
                             <property name="child">
@@ -628,7 +625,7 @@
                                         <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Date and Time</property>
+                                            <property name="label">Date and Time</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -646,7 +643,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="text">Automatic</property>
+                                                <property name="label">Automatic</property>
                                               </object>
                                             </child>
                                           </object>
@@ -680,7 +677,7 @@
                                         <property name="spacing">12</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="text">Storage</property>
+                                            <property name="label">Storage</property>
                                             <property name="halign">start</property>
                                             <style>
                                               <class name="heading"/>
@@ -704,7 +701,7 @@
                                                 <property name="spacing">10</property>
                                                 <child>
                                                   <object class="GtkLabel" id="photos_count">
-                                                    <property name="text">Photos: 45</property>
+                                                    <property name="label">Photos: 45</property>
                                                     <property name="halign">start</property>
                                                   </object>
                                                 </child>
@@ -715,7 +712,7 @@
                                                 </child>
                                                 <child>
                                                   <object class="GtkLabel" id="videos_count">
-                                                    <property name="text">Videos: 12</property>
+                                                    <property name="label">Videos: 12</property>
                                                     <property name="halign">end</property>
                                                   </object>
                                                 </child>

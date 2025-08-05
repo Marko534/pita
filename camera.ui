@@ -1,76 +1,176 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-name camera.ui -->
-  <requires lib="gtk" version="4.6" />
-  <object class="GtkApplicationWindow" id="main_window">
-    <property name="default-height">600</property>
-    <property name="default-width">800</property>
-    <property name="title">Raspberry Pi Camera</property>
-    <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
-        <property name="spacing">10</property>
+    <requires lib="gtk" version="4.0" />
+    <requires lib="libadwaita" version="1.0" />
+    <object class="AdwApplicationWindow" id="main_window">
+        <property name="title">Carousel Demo</property>
+        <property name="content">
+            <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                    <object class="AdwCarousel" id="carousel">
+                        <property name="vexpand">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="allow-scroll-wheel">True</property>
+                        <property name="allow-long-swipes">True</property>
+                        <child>
+                            <object class="AdwStatusPage">
+                                <property name="name">home</property>
+                                <property name="child">
+                                    <object class="GtkOverlay" id="home_overlay">
 
-        <!-- Camera Preview Area -->
-        <child>
-          <object class="GtkPicture" id="camera_preview">
-            <property name="height-request">480</property>
-            <property name="width-request">640</property>
-            <property name="can-shrink">False</property>
-            <property name="content-fit">cover</property>
-          </object>
-        </child>
+                                        <!-- Top Left - Gallery Button -->
+                                        <child type="overlay">
+                                            <object class="GtkButton" id="gallery_btn">
+                                                <property name="width-request">60</property>
+                                                <property name="height-request">60</property>
+                                                <property name="halign">start</property>
+                                                <property name="valign">start</property>
+                                                <style>
+                                                    <class name="circular" />
+                                                    <class name="osd" />
+                                                </style>
+                                                <child>
+                                                    <object class="GtkLabel" id="gallery_label">
+                                                        <property name="label"></property>
+                                                        <attributes>
+                                                            <attribute name="font-desc" value="32" />
+                                                        </attributes>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
 
-        <!-- Controls Box -->
-        <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <property name="spacing">10</property>
-            <property name="margin-bottom">10</property>
-            <property name="margin-end">10</property>
-            <property name="margin-start">10</property>
-            <property name="margin-top">10</property>
-            <property name="halign">center</property>
+                                        <!-- Top Right - Settings Button -->
+                                        <child type="overlay">
+                                            <object class="GtkButton" id="settings_btn">
+                                                <property name="width-request">60</property>
+                                                <property name="height-request">60</property>
+                                                <property name="halign">end</property>
+                                                <property name="valign">start</property>
+                                                <property name="margin-top">20</property>
+                                                <property name="margin-end">20</property>
+                                                <style>
+                                                    <class name="circular" />
+                                                    <class name="osd" />
+                                                </style>
+                                                <child>
+                                                    <object class="GtkLabel" id="settings_lable">
+                                                        <property name="label"></property>
+                                                        <attributes>
+                                                            <attribute name="font-desc" value="32" />
+                                                        </attributes>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
 
-            <!-- Capture Button -->
-            <child>
-              <object class="GtkButton" id="capture_button">
-                <property name="icon-name">camera-photo-symbolic</property>
-                <property name="tooltip-text">Take Photo</property>
-                <property name="width-request">100</property>
-              </object>
-            </child>
+                                        <!-- Bottom Left - Recording Indicator -->
+                                        <child type="overlay">
+                                            <object class="GtkBox" id="recording_indicator">
+                                                <property name="orientation">horizontal</property>
+                                                <property name="spacing">8</property>
+                                                <property name="visible">False</property>
+                                                <property name="halign">start</property>
+                                                <property name="valign">end</property>
+                                                <property name="margin-bottom">40</property>
+                                                <property name="margin-start">40</property>
+                                                <style>
+                                                    <class name="osd" />
+                                                </style>
+                                                <child>
+                                                    <object class="GtkImage">
+                                                        <property name="icon-name">media-record-symbolic</property>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkLabel" id="recording_time">
+                                                        <property name="label">00:00</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
 
-            <!-- Record Button -->
-            <child>
-              <object class="GtkButton" id="record_button">
-                <property name="icon-name">media-record-symbolic</property>
-                <property name="tooltip-text">Start/Stop Recording</property>
-                <property name="width-request">100</property>
-              </object>
-            </child>
+                                        <!-- Bottom Right - Video/Photo Toggle -->
+                                        <child type="overlay">
+                                            <object class="GtkToggleButton" id="mode_toggle">
+                                                <property name="width-request">50</property>
+                                                <property name="height-request">50</property>
+                                                <property name="halign">end</property>
+                                                <property name="valign">end</property>
+                                                <property name="margin-bottom">40</property>
+                                                <property name="margin-end">40</property>
+                                                <style>
+                                                    <class name="circular" />
+                                                    <class name="osd" />
+                                                </style>
+                                                <child>
+                                                    <object class="GtkLabel" id="mode_label">
+                                                        <property name="label">󰸚</property>
+                                                        <attributes>
+                                                            <attribute name="font-desc" value="32" />
+                                                        </attributes>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
 
-            <!-- Settings Button -->
-            <child>
-              <object class="GtkButton" id="settings_button">
-                <property name="icon-name">emblem-system-symbolic</property>
-                <property name="tooltip-text">Camera Settings</property>
-                <property name="width-request">100</property>
-              </object>
-            </child>
-          </object>
-        </child>
-
-        <!-- Status Bar -->
-        <child>
-          <object class="GtkStatusbar" id="status_bar">
-            <property name="margin-bottom">5</property>
-            <property name="margin-end">5</property>
-            <property name="margin-start">5</property>
-            <property name="margin-top">5</property>
-          </object>
-        </child>
-      </object>
-    </child>
-  </object>
+                                        <!-- Center - Main Capture Button -->
+                                        <child type="overlay">
+                                            <object class="GtkButton" id="capture_btn">
+                                                <property name="width-request">80</property>
+                                                <property name="height-request">80</property>
+                                                <property name="halign">center</property>
+                                                <property name="valign">center</property>
+                                                <style>
+                                                    <class name="circular" />
+                                                    <class name="suggested-action" />
+                                                    <class name="osd" />
+                                                </style>
+                                                <child>
+                                                    <object class="GtkLabel" id="capture_label">
+                                                        <property name="label">󰄄</property>
+                                                        <attributes>
+                                                            <attribute name="font-desc" value="32" />
+                                                        </attributes>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="AdwStatusPage">
+                                <property name="icon-name">applications-multimedia-symbolic</property>
+                                <property name="title">Page 2</property>
+                                <property name="description">This is the second page</property>
+                                <property name="vexpand">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="AdwStatusPage">
+                                <property name="icon-name">applications-system-symbolic</property>
+                                <property name="title">Page 3</property>
+                                <property name="description">This is the third page</property>
+                                <property name="vexpand">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="valign">center</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+                <child>
+                    <object class="AdwCarouselIndicatorDots" id="indicators">
+                        <property name="carousel">carousel</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                    </object>
+                </child>
+            </object>
+        </property>
+    </object>
 </interface>
