@@ -15,7 +15,8 @@ class CameraApp(Adw.Application):
     def on_activate(self, app):
         # Load the UI file
         builder = Gtk.Builder()
-        builder.add_from_file("camera.ui")
+        # builder.add_from_file("ui/camera.ui")
+        builder.add_from_file("ui/adw-demo-page-bottom-sheets.ui")
 
         # Get the window from UI file
         self.window = builder.get_object("main_window")
