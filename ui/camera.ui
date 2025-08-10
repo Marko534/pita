@@ -38,10 +38,17 @@
 
                                 <!-- Page 1 -->
                                 <child>
-                                    <object class="AdwStatusPage">
-                                        <property name="title">Page 1</property>
+                                    <object class="GtkBox">
+                                        <property name="orientation">horizontal</property>
                                         <property name="hexpand">True</property>
                                         <property name="vexpand">True</property>
+                                        <child>
+                                            <object class="GtkButton" id="capture_button">
+                                                <property name="label">Capture</property>
+                                                <property name="halign">center</property>
+                                                <property name="valign">center</property>
+                                            </object>
+                                        </child>
                                     </object>
                                 </child>
 

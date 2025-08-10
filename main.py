@@ -6,6 +6,7 @@ import threading
 import time
 from PIL import Image
 import io
+import os
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -20,12 +21,14 @@ class CameraApp(Adw.Application):
         self.viewfinder_widget = None
         self.update_thread = None
         self.running = False
+        self.capture_config = (
+            None  # Will hold the high-res capture configuration
+        )
 
     def on_activate(self, app):
         # Load the UI file
         builder = Gtk.Builder()
-        # Make sure to use the correct UI file name
-        builder.add_from_file("ui/camera.ui")  # Changed back to camera.ui
+        builder.add_from_file("ui/camera.ui")
 
         # Get the window from UI file
         self.window = builder.get_object("main_window")
@@ -33,6 +36,10 @@ class CameraApp(Adw.Application):
 
         # Get the viewfinder widget
         self.viewfinder_widget = builder.get_object("viewfinder")
+
+        # Get the capture button and connect signal
+        self.capture_button = builder.get_object("capture_button")
+        self.capture_button.connect("clicked", self.on_capture_clicked)
 
         # Initialize camera
         self.setup_camera()
@@ -48,13 +55,20 @@ class CameraApp(Adw.Application):
         try:
             self.picam2 = Picamera2()
 
-            # Configure camera for preview with specific format
+            # Preview config with lower resolution
             preview_config = self.picam2.create_preview_configuration(
-                main={"size": (640, 480), "format": "RGB888"}, display="main"
+                main={"size": (640, 480), "format": "RGB888"},
+                display="main",
+                queue=False,  # Don't buffer frames
             )
-            self.picam2.configure(preview_config)
 
-            # Start the camera
+            # High-res capture config
+            self.capture_config = self.picam2.create_still_configuration(
+                main={"size": self.picam2.sensor_resolution},
+                buffer_count=2,  # Minimal buffer
+            )
+
+            self.picam2.configure(preview_config)
             self.picam2.start()
 
             # Start the viewfinder update thread
@@ -69,11 +83,10 @@ class CameraApp(Adw.Application):
 
         except Exception as e:
             print(f"Failed to initialize camera: {e}")
-            # Show error dialog
             self.show_error_dialog(f"Camera Error: {e}")
 
     def update_viewfinder(self):
-        """Continuously update the viewfinder with camera frames (no JPEG/PNG)"""
+        """Continuously update the viewfinder with camera frames"""
         while self.running:
             try:
                 if self.picam2 and self.viewfinder_widget:
@@ -82,7 +95,7 @@ class CameraApp(Adw.Application):
                         pil_image = pil_image.convert("RGB")
                     pil_image = pil_image.resize((640, 480), Image.LANCZOS)
 
-                    # Directly convert to RGB bytes (no compression)
+                    # Directly convert to RGB bytes
                     data = pil_image.tobytes()
                     pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
                         GLib.Bytes.new(data),
@@ -107,9 +120,41 @@ class CameraApp(Adw.Application):
             self.viewfinder_widget.set_pixbuf(pixbuf)
         return False  # Don't repeat this idle callback
 
+    def on_capture_clicked(self, button):
+        """Handle capture button click - take full resolution photo"""
+        print("Capture button clicked")
+        if self.picam2:
+            try:
+                # Switch to high-res capture configuration
+                self.picam2.switch_mode_and_capture_file(
+                    self.capture_config, self.get_capture_filename()
+                )
+
+                # Show success message
+                self.show_toast("Image captured successfully!")
+
+            except Exception as e:
+                print(f"Capture failed: {e}")
+                self.show_error_dialog(f"Capture failed: {e}")
+
+    def get_capture_filename(self):
+        """Generate a timestamped filename for captures"""
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        # Create captures directory if it doesn't exist
+        os.makedirs("captures", exist_ok=True)
+        return f"captures/capture_{timestamp}.jpg"
+
+    def show_toast(self, message):
+        """Show a toast notification"""
+        toast = Adw.Toast.new(message)
+        toast.set_timeout(3)  # 3 seconds
+        self.window.add_toast(toast)
+
     def show_error_dialog(self, message):
         """Show error dialog"""
-        dialog = Adw.MessageDialog.new(self.window, "Error", message)
+        dialog = Adw.MessageDialog.new(
+            transient_for=self.window, heading="Error", body=message
+        )
         dialog.add_response("ok", "OK")
         dialog.present()
 
@@ -131,33 +176,6 @@ class CameraApp(Adw.Application):
                 print("Camera cleaned up successfully")
             except Exception as e:
                 print(f"Error during camera cleanup: {e}")
-
-    def on_capture_clicked(self, button):
-        """Handle capture button click"""
-        print("Capture button clicked")
-        if self.picam2:
-            try:
-                # Capture high resolution image
-                # You might want to reconfigure for higher resolution capture
-                timestamp = int(time.time())
-                filename = f"capture_{timestamp}.jpg"
-                self.picam2.capture_file(filename)
-                print(f"Image saved as {filename}")
-
-                # Show success message
-                toast = Adw.Toast()
-                toast.set_title(f"Image saved as {filename}")
-                # You'd need to add a toast overlay to your UI to show this
-
-            except Exception as e:
-                print(f"Capture failed: {e}")
-                self.show_error_dialog(f"Capture failed: {e}")
-
-    def on_record_clicked(self, button):
-        """Handle record button click"""
-        print("Record button clicked")
-        # Add video recording logic here
-        # This would require additional configuration and state management
 
 
 if __name__ == "__main__":
