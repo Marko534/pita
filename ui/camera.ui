@@ -5,58 +5,73 @@
     <requires lib="libadwaita" version="1.7" />
 
     <object class="AdwApplicationWindow" id="main_window">
-
         <child>
             <object class="GtkBox">
                 <property name="orientation">horizontal</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
 
-                <!-- Main Carousel -->
+                <!-- Left Panel (fixed 640px) -->
+
+                <!-- ViewFinder will be inserted here programmatically -->
                 <child>
-                    <object class="AdwCarousel" id="carousel">
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="allow-mouse-drag">True</property>
-                        <property name="interactive">True</property>
-                        <property name="orientation">horizontal</property>
-
-                        <!-- Page 1 -->
-                        <child>
-                            <object class="AdwStatusPage">
-                                <property name="title">Page 1</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                            </object>
-                        </child>
-
-                        <!-- Page 2 -->
-                        <child>
-                            <object class="AdwStatusPage">
-                                <property name="title">Page 2</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                            </object>
-                        </child>
-
-                        <!-- Page 3 -->
-                        <child>
-                            <object class="AdwStatusPage">
-                                <property name="title">Page 3</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                            </object>
-                        </child>
+                    <object class="GtkPicture" id="viewfinder">
                     </object>
                 </child>
 
-                <!-- Indicator -->
+
+                <!-- Right Panel (takes remaining space) -->
                 <child>
-                    <object class="AdwCarouselIndicatorLines">
-                        <property name="orientation">vertical</property>
-                        <property name="carousel">carousel</property>
-                        <property name="margin-top">12</property>
-                        <property name="margin-bottom">12</property>
+                    <object class="GtkBox" id="right_panel">
+                        <property name="orientation">horizontal</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+
+                        <!-- Carousel -->
+                        <child>
+                            <object class="AdwCarousel" id="carousel">
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="allow-mouse-drag">True</property>
+                                <property name="interactive">True</property>
+                                <property name="orientation">horizontal</property>
+
+                                <!-- Page 1 -->
+                                <child>
+                                    <object class="AdwStatusPage">
+                                        <property name="title">Page 1</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="vexpand">True</property>
+                                    </object>
+                                </child>
+
+                                <!-- Page 2 -->
+                                <child>
+                                    <object class="AdwStatusPage">
+                                        <property name="title">Page 2</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="vexpand">True</property>
+                                    </object>
+                                </child>
+
+                                <!-- Page 3 -->
+                                <child>
+                                    <object class="AdwStatusPage">
+                                        <property name="title">Page 3</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="vexpand">True</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <!-- Indicator -->
+                        <child>
+                            <object class="AdwCarouselIndicatorLines">
+                                <property name="orientation">vertical</property>
+                                <property name="carousel">carousel</property>
+                            </object>
+                        </child>
                     </object>
                 </child>
             </object>
