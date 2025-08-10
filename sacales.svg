@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="800mm"
+   height="480mm"
+   viewBox="0 0 800 480"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="sacales.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showguides="true"
+     inkscape:zoom="0.16634435"
+     inkscape:cx="1755.3948"
+     inkscape:cy="1301.517"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Ref"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#f4e3d7;stroke-width:12.0566"
+       id="rect1-2"
+       width="4056"
+       height="3040"
+       x="1.4210855e-14"
+       y="-3040"
+       inkscape:label="big" />
+    <rect
+       style="fill:#e9c6af;stroke-width:0.233844"
+       id="rect2-2"
+       width="2028"
+       height="1520"
+       x="0"
+       y="-1520"
+       inkscape:label="medium" />
+    <rect
+       style="fill:#deaa87;stroke-width:0.197113"
+       id="rect2-3-5"
+       width="2028"
+       height="1080"
+       x="0"
+       y="-1080"
+       inkscape:label="wide" />
+    <rect
+       style="fill:#d38d5f;stroke-width:0.152946"
+       id="rect2-3-1-9"
+       width="1332"
+       height="990"
+       x="-5.6843419e-14"
+       y="-990"
+       inkscape:label="small" />
+    <rect
+       style="fill:#e3f4d7;stroke-width:2.12767"
+       id="rect1-3-6"
+       width="800"
+       height="480.00003"
+       x="0"
+       y="-480"
+       inkscape:label="screen" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Scale"
+     transform="translate(4825.8433,-1457.9587)">
+    <rect
+       style="fill:#e3f4d7;stroke-width:13.4753"
+       id="rect1-3"
+       width="5066.6665"
+       height="3040"
+       x="0"
+       y="0"
+       inkscape:label="screen_scale" />
+    <rect
+       style="fill:#f4e3d7;stroke-width:12.0566"
+       id="rect1"
+       width="4056"
+       height="3040"
+       x="0"
+       y="-7.1054274e-15"
+       inkscape:label="big_scale" />
+    <rect
+       style="fill:#e9c6af;stroke-width:0.467688"
+       id="rect2"
+       width="4056"
+       height="3040"
+       x="-9.094947e-13"
+       y="-4.5474735e-13"
+       inkscape:label="medium_scale" />
+    <rect
+       style="fill:#d38d5f;stroke-width:0.465726"
+       id="rect2-3-1"
+       width="4056"
+       height="3014.5945"
+       x="0"
+       y="0"
+       inkscape:label="small_scale" />
+    <rect
+       style="fill:#deaa87;stroke-width:0.394226"
+       id="rect2-3"
+       width="4056"
+       height="2160"
+       x="0"
+       y="0"
+       inkscape:label="wide_scale" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Screen">
+    <rect
+       style="fill:#e3f4d7;stroke-width:2.12767"
+       id="rect1-3-6-0"
+       width="800"
+       height="480.00003"
+       x="0"
+       y="-4.5474735e-13"
+       inkscape:label="screen" />
+    <rect
+       style="fill:#f4e3d7;stroke-width:1.90367"
+       id="rect1-2-1"
+       width="640.42108"
+       height="480"
+       x="0"
+       y="-4.5474735e-13"
+       inkscape:label="big" />
+  </g>
+</svg>
