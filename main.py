@@ -16,7 +16,7 @@ class CameraApp(Adw.Application):
         # Load the UI file
         builder = Gtk.Builder()
         # builder.add_from_file("ui/camera.ui")
-        builder.add_from_file("ui/adw-demo-page-bottom-sheets.ui")
+        builder.add_from_file("ui/adw-multi-layout-demo-dialog.ui")
 
         # Get the window from UI file
         self.window = builder.get_object("main_window")
