@@ -1,87 +1,170 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.1 -->
 <interface>
-    <requires lib="Adw" version="1.0" />
-    <requires lib="gtk" version="4.0" />
-    <requires lib="libadwaita" version="1.7" />
-
-    <object class="AdwApplicationWindow" id="main_window">
+  <!-- interface-name camera.ui -->
+  <requires lib="Adw" version="1.0" />
+  <requires lib="gtk" version="4.0" />
+  <requires lib="libadwaita" version="1.7" />
+  <object class="AdwApplicationWindow" id="main_window">
+    <child>
+      <object class="AdwToastOverlay" id="toast_overlay">
         <child>
-            <object class="GtkBox">
-                <property name="orientation">horizontal</property>
+          <object class="GtkBox">
+            <property name="hexpand">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkPicture" id="viewfinder" />
+            </child>
+            <child>
+              <object class="GtkBox">
                 <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
                 <property name="vexpand">True</property>
-
-                <!-- Left Panel (fixed 640px) -->
-
-                <!-- ViewFinder will be inserted here programmatically -->
                 <child>
-                    <object class="GtkPicture" id="viewfinder">
-                    </object>
-                </child>
-
-
-                <!-- Right Panel (takes remaining space) -->
-                <child>
-                    <object class="GtkBox" id="right_panel">
-                        <property name="orientation">horizontal</property>
-                        <property name="hexpand">True</property>
+                  <object class="GtkBox">
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="AdwCarouselIndicatorDots">
+                        <property name="carousel">top_carousel</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwCarousel" id="top_carousel">
+                        <property name="allow-long-swipes">True</property>
+                        <property name="allow-scroll-wheel">False</property>
+                        <property name="halign">baseline</property>
+                        <property name="interactive">True</property>
                         <property name="vexpand">True</property>
-
-                        <!-- Carousel -->
                         <child>
-                            <object class="AdwCarousel" id="carousel">
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                                <property name="allow-mouse-drag">True</property>
-                                <property name="interactive">True</property>
-                                <property name="orientation">horizontal</property>
-
-                                <!-- Page 1 -->
-                                <child>
-                                    <object class="GtkBox">
-                                        <property name="orientation">horizontal</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="vexpand">True</property>
-                                        <child>
-                                            <object class="GtkButton" id="capture_button">
-                                                <property name="label">Capture</property>
-                                                <property name="halign">center</property>
-                                                <property name="valign">center</property>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-
-                                <!-- Page 2 -->
-                                <child>
-                                    <object class="AdwStatusPage">
-                                        <property name="title">Page 2</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="vexpand">True</property>
-                                    </object>
-                                </child>
-
-                                <!-- Page 3 -->
-                                <child>
-                                    <object class="AdwStatusPage">
-                                        <property name="title">Page 3</property>
-                                        <property name="hexpand">True</property>
-                                        <property name="vexpand">True</property>
-                                    </object>
-                                </child>
-                            </object>
+                          <object class="AdwStatusPage">
+                            <property name="title">Top Page 1</property>
+                            <property name="vexpand">True</property>
+                          </object>
                         </child>
-
-                        <!-- Indicator -->
                         <child>
-                            <object class="AdwCarouselIndicatorLines">
-                                <property name="orientation">vertical</property>
-                                <property name="carousel">carousel</property>
-                            </object>
+                          <object class="AdwStatusPage">
+                            <property name="title">Top Page 2</property>
+                          </object>
                         </child>
-                    </object>
+                        <child>
+                          <object class="AdwStatusPage">
+                            <property name="title">Top Page 3</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwStatusPage">
+                            <property name="title">Top Page 4</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwStatusPage">
+                            <property name="title">Top Page 5</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwStatusPage">
+                            <property name="title">Top Page 6</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
-            </object>
+                <child>
+                  <object class="GtkBox">
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="valign">end</property>
+                    <child>
+                      <object class="AdwCarousel" id="bottom_carousel">
+                        <property name="allow-mouse-drag">True</property>
+                        <property name="allow-scroll-wheel">False</property>
+                        <property name="halign">baseline</property>
+                        <property name="hexpand">True</property>
+                        <property name="overflow">hidden</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="halign">baseline</property>
+                            <property name="hexpand">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="overflow">hidden</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkButton" id="capture_button">
+                                <property name="halign">center</property>
+                                <property name="height-request">80</property>
+                                <property name="hexpand">False</property>
+                                <property name="valign">center</property>
+                                <property name="width-request">80</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">center</property>
+                                    <property name="label"></property>
+                                    <!-- <property name="label">󰄄</property> -->
+                                    <property name="valign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="32" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="circular" />
+                                  <class name="osd" />
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="halign">baseline</property>
+                            <property name="hexpand">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="overflow">hidden</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkToggleButton" id="record_button">
+                                <!-- <signal name="toggled" handler="on_record_button_toggled" /> -->
+                                <property name="halign">center</property>
+                                <property name="height-request">80</property>
+                                <property name="hexpand">False</property>
+                                <property name="valign">center</property>
+                                <property name="width-request">80</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">center</property>
+                                    <property name="label"></property>
+                                    <property name="valign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="32" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="circular" />
+                                  <class name="osd" />
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwCarouselIndicatorDots">
+                        <property name="carousel">bottom_carousel</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
         </child>
-    </object>
+      </object>
+    </child>
+  </object>
 </interface>
