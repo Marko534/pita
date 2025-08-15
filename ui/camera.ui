@@ -78,6 +78,7 @@
                     <property name="hexpand">True</property>
                     <property name="orientation">vertical</property>
                     <property name="valign">end</property>
+
                     <child>
                       <object class="AdwCarousel" id="bottom_carousel">
                         <property name="allow-mouse-drag">True</property>
@@ -85,6 +86,8 @@
                         <property name="halign">baseline</property>
                         <property name="hexpand">True</property>
                         <property name="overflow">hidden</property>
+                        <property name="margin-bottom">10</property>
+
                         <child>
                           <object class="GtkBox">
                             <property name="halign">baseline</property>
@@ -123,7 +126,6 @@
                             <property name="halign">baseline</property>
                             <property name="orientation">vertical</property>
                             <property name="valign">center</property>
-                            <property name="margin-bottom">10</property>
                             <child>
                               <object class="GtkToggleButton" id="record_button">
                                 <property name="halign">center</property>

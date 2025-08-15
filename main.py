@@ -5,6 +5,8 @@ import time
 from picamera2 import Picamera2
 from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
+from picamera2.encoders import H264Encoder
+from picamera2.outputs import FfmpegOutput
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
@@ -57,10 +59,17 @@ class CameraApp(Adw.Application):
         try:
             self.picam2 = Picamera2()
 
-            preview_config = self.picam2.create_preview_configuration(
-                main={"size": (640, 480), "format": "BGR888"}, queue=False
+            # preview_config = self.picam2.create_preview_configuration(
+            #     main={"size": (640, 480), "format": "BGR888"}, queue=False
+            # )
+
+            preview_config = self.picam2.create_video_configuration(
+                main={
+                    "size": (2028, 1520),  # Matches sensor mode size
+                },
             )
 
+            preview_config = self.picam2.create_video_configuration()
             self.capture_config = self.picam2.create_still_configuration(
                 main={"size": self.picam2.sensor_resolution},
                 buffer_count=2,
@@ -85,10 +94,14 @@ class CameraApp(Adw.Application):
         """Background thread for updating the preview"""
         while self.running:
             try:
-                frame = self.picam2.capture_array("main")
+                pil_image = self.picam2.capture_image("main")
+                if pil_image.mode != "RGB":
+                    pil_image = pil_image.convert("RGB")
+                pil_image = pil_image.resize((640, 480), Image.LANCZOS)
+                # Directly convert to RGB bytes
 
                 pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-                    GLib.Bytes.new(frame.tobytes()),
+                    GLib.Bytes.new(pil_image.tobytes()),
                     GdkPixbuf.Colorspace.RGB,
                     False,
                     8,
@@ -142,8 +155,13 @@ class CameraApp(Adw.Application):
             label.set_attributes(attr_list)
 
             self.recording_start_time = time.time()
-            # Update timer every second
-            self.timer_id = GLib.timeout_add(1000, self.update_recording_timer)
+
+            output = FfmpegOutput(
+                self.get_capture_filename() + ".mp4", audio=False
+            )
+
+            self.picam2.start_encoder(H264Encoder(), output)
+            print(self.get_capture_filename() + ".mp4")
 
         else:
 
@@ -160,18 +178,9 @@ class CameraApp(Adw.Application):
             size_attr = Pango.attr_size_new(32 * Pango.SCALE)
             attr_list.insert(size_attr)
             label.set_attributes(attr_list)
+            self.picam2.stop_encoder()
 
     def capture_image(self):
-        filename = self.get_capture_filename()
-        image = self.picam2.switch_mode_and_capture_request(
-            self.capture_config
-        )
-
-        image.save("main", self.get_capture_filename() + ".jpg")
-        # image.save("main", self.get_capture_filename() + ".png")
-        # image.save_dng(self.get_capture_filename() + ".dng")
-
-    def start_video(self):
         filename = self.get_capture_filename()
         image = self.picam2.switch_mode_and_capture_request(
             self.capture_config
@@ -195,7 +204,7 @@ class CameraApp(Adw.Application):
         if self.timer_id:
             GLib.source_remove(self.timer_id)
             self.timer_id = 0
-        # self.stop_recording()
+        self.picam2.stop_recording()
 
         self.running = False
         self.executor.shutdown(wait=True)
