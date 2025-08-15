@@ -98,7 +98,7 @@
                                 <property name="height-request">80</property>
                                 <property name="hexpand">False</property>
                                 <property name="valign">center</property>
-                                <property name="width-request">80</property>
+                                <property name="width-request">110</property>
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="halign">center</property>
@@ -111,8 +111,8 @@
                                   </object>
                                 </child>
                                 <style>
-                                  <class name="circular" />
-                                  <class name="osd" />
+                                  <class name="pill" />
+                                  <class name="text-button" />
                                 </style>
                               </object>
                             </child>
@@ -121,18 +121,17 @@
                         <child>
                           <object class="GtkBox">
                             <property name="halign">baseline</property>
-                            <property name="hexpand">True</property>
                             <property name="orientation">vertical</property>
-                            <property name="overflow">hidden</property>
                             <property name="valign">center</property>
+                            <property name="margin-bottom">10</property>
                             <child>
                               <object class="GtkToggleButton" id="record_button">
-                                <!-- <signal name="toggled" handler="on_record_button_toggled" /> -->
                                 <property name="halign">center</property>
+                                <!-- <property name="opacity">0.80</property> -->
                                 <property name="height-request">80</property>
                                 <property name="hexpand">False</property>
                                 <property name="valign">center</property>
-                                <property name="width-request">80</property>
+                                <property name="width-request">110</property>
                                 <child>
                                   <object class="GtkLabel">
                                     <property name="halign">center</property>
@@ -144,8 +143,8 @@
                                   </object>
                                 </child>
                                 <style>
-                                  <class name="circular" />
-                                  <class name="osd" />
+                                  <class name="pill" />
+                                  <class name="text-button" />
                                 </style>
                               </object>
                             </child>
