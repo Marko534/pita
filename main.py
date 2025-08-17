@@ -1,3 +1,4 @@
+import cv2
 import sys
 import gi
 import os
@@ -5,7 +6,7 @@ import time
 from picamera2 import Picamera2
 from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
-from picamera2.encoders import H264Encoder
+from picamera2.encoders import H264Encoder, MJPEGEncoder, Quality
 from picamera2.outputs import FfmpegOutput
 
 gi.require_version("Gtk", "4.0")
@@ -33,6 +34,15 @@ class CameraApp(Adw.Application):
         self.executor = ThreadPoolExecutor(
             max_workers=2
         )  # One for preview, one for captures
+
+        self.img_dict = {
+            # "ColourCorrectionMatrix": self.ccm.value(),
+            "Saturation": 1.0,
+            "Contrast": 1.0,
+            "Sharpness": 1.0,
+            "Brightness": 0.0,
+            # "NoiseReductionMode": None,
+        }
 
     def on_activate(self, app):
         builder = Gtk.Builder()
@@ -63,22 +73,27 @@ class CameraApp(Adw.Application):
             #     main={"size": (640, 480), "format": "BGR888"}, queue=False
             # )
 
-            preview_config = self.picam2.create_video_configuration(
+            self.record_config = self.picam2.create_video_configuration(
                 main={
-                    "size": (2028, 1520),  # Matches sensor mode size
+                    "size": (2028, 1080),  # Matches Mode 2 resolution
+                },
+                lores={"size": (640, 480)},
+                display="lores",
+                encode="main",
+                sensor={
+                    "output_size": (2028, 1080),  # Ensures correct sensor mode
+                    "bit_depth": 12,  # SRGGB12 (12-bit RAW)
                 },
             )
 
-            preview_config = self.picam2.create_video_configuration()
             self.capture_config = self.picam2.create_still_configuration(
                 main={"size": self.picam2.sensor_resolution},
+                lores={"size": (640, 480)},
                 buffer_count=2,
                 display=None,
             )
 
-            self.record_config = self.picam2.create_video_configuration()
-
-            self.picam2.configure(preview_config)
+            self.picam2.configure(self.record_config)
             self.picam2.start()
 
             self.running = True
@@ -94,14 +109,15 @@ class CameraApp(Adw.Application):
         """Background thread for updating the preview"""
         while self.running:
             try:
-                pil_image = self.picam2.capture_image("main")
-                if pil_image.mode != "RGB":
-                    pil_image = pil_image.convert("RGB")
-                pil_image = pil_image.resize((640, 480), Image.LANCZOS)
-                # Directly convert to RGB bytes
+                yuv_array = self.picam2.capture_array("lores")
 
-                pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-                    GLib.Bytes.new(pil_image.tobytes()),
+                # Convert YUV420 to RGB using OpenCV
+                rgb_array = cv2.cvtColor(yuv_array, cv2.COLOR_YUV2RGB_I420)
+
+                # Create GdkPixbuf directly from RGB array
+                height, width, channels = rgb_array.shape
+                pixbuf = GdkPixbuf.Pixbuf.new_from_data(
+                    rgb_array.tobytes(),
                     GdkPixbuf.Colorspace.RGB,
                     False,
                     8,
@@ -160,7 +176,15 @@ class CameraApp(Adw.Application):
                 self.get_capture_filename() + ".mp4", audio=False
             )
 
-            self.picam2.start_encoder(H264Encoder(), output)
+            # For high rez
+            # self.picam2.start_encoder(
+            #     MJPEGEncoder(), output, quality=Quality.VERY_HIGH
+            # )
+
+            # For HD and lower
+            self.picam2.start_encoder(
+                H264Encoder(), output, quality=Quality.VERY_HIGH
+            )
             print(self.get_capture_filename() + ".mp4")
 
         else:
