@@ -1,6 +1,7 @@
 # Pita 📸 – Raspberry Pi Touchscreen Digital Camera
 
 Pita ("pie" in Macedonian) is a homemade Raspberry Pi-powered digital camera with a custom touchscreen UI built using GTK 4 and Python. It provides the basic functionality of a digital camera while remaining hackable and fully customizable.
+
 ---
 
 ## ✨ Features
@@ -28,9 +29,9 @@ Pita is designed as an **open, hackable camera platform**:
 
 ---
 
-## 🖥️ Screenshots
+## 🖥️ Images
 
-<img width="452" height="412" alt="image" src="https://github.com/user-attachments/assets/dbdc97be-4e49-416d-be73-f9b56ca4522f" />
+<img width="931" height="523" alt="image" src="https://github.com/user-attachments/assets/fbca959b-c94c-4e1e-ba65-dd1a4ff753f1" />
 
 ---
 
@@ -79,4 +80,4 @@ pip install -r requirements.txt
 
 ### 3. Run the app
 ```python3 pita/main.py
-
+```
