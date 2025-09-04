@@ -5,285 +5,487 @@
   <requires lib="Adw" version="1.0" />
   <requires lib="gtk" version="4.0" />
   <requires lib="libadwaita" version="1.7" />
+  
+  <!-- Main Application Window -->
   <object class="AdwApplicationWindow" id="main_window">
     <child>
       <object class="AdwToastOverlay" id="toast_overlay">
         <child>
-          <object class="GtkBox">
-            <property name="hexpand">True</property>
-            <property name="orientation">horizontal</property>
-            <property name="vexpand">True</property>
+          <!-- Main Stack for switching between camera and gallery -->
+          <object class="GtkStack" id="main_stack">
+            <!-- Camera View -->
             <child>
-              <object class="GtkPicture" id="viewfinder" />
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="hexpand">True</property>
-                <property name="orientation">vertical</property>
-                <property name="vexpand">True</property>
-                <child>
+              <object class="GtkStackPage">
+                <property name="name">camera</property>
+                <property name="child">
                   <object class="GtkBox">
                     <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="orientation">horizontal</property>
                     <property name="vexpand">True</property>
                     <child>
-                      <object class="AdwCarouselIndicatorDots">
-                        <property name="carousel">top_carousel</property>
-                      </object>
+                      <object class="GtkPicture" id="viewfinder" />
                     </child>
                     <child>
-                      <object class="AdwCarousel" id="top_carousel">
-                        <property name="allow-long-swipes">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="focusable">True</property>
+                      <object class="GtkBox">
                         <property name="hexpand">True</property>
+                        <property name="orientation">vertical</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">10</property>
-                            <property name="margin-top">20</property>
-                            <property name="margin-bottom">10</property>
-                            <property name="vexpand">True</property>
-
-                            <!-- Saturation Control -->
-                            <child>
-                              <object class="GtkBox">
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="label">Saturation</property>
-                                    <property name="halign">center</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="12" />
-                                      <attribute name="weight" value="bold" />
-                                    </attributes>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkScale" id="saturation">
-                                    <property name="adjustment">
-                                      <object class="GtkAdjustment">
-                                        <property name="step-increment">0.1</property>
-                                        <property name="upper">200.0</property>
-                                        <property name="value">100.0</property>
-                                      </object>
-                                    </property>
-                                    <property name="margin-top">0</property>
-                                    <property name="margin-bottom">0</property>
-                                    <property name="draw-value">true</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="value-pos">bottom</property>
-                                    <property name="width-request">130</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-
-                            <!-- Contrast Control -->
-                            <child>
-                              <object class="GtkBox">
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="label">Contrast</property>
-                                    <property name="halign">center</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="12" />
-                                      <attribute name="weight" value="bold" />
-                                    </attributes>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkScale" id="contrast">
-                                    <property name="adjustment">
-                                      <object class="GtkAdjustment">
-                                        <property name="step-increment">0.1</property>
-                                        <property name="upper">200.0</property>
-                                        <property name="value">100.0</property>
-                                      </object>
-                                    </property>
-                                    <property name="margin-top">0</property>
-                                    <property name="margin-bottom">0</property>
-                                    <property name="draw-value">true</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="value-pos">bottom</property>
-                                    <property name="width-request">130</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-
-                            <!-- Sharpness Control -->
-                            <child>
-                              <object class="GtkBox">
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="label">Sharpness</property>
-                                    <property name="halign">center</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="12" />
-                                      <attribute name="weight" value="bold" />
-                                    </attributes>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkScale" id="sharpness">
-                                    <property name="adjustment">
-                                      <object class="GtkAdjustment">
-                                        <property name="step-increment">0.1</property>
-                                        <property name="upper">200.0</property>
-                                        <property name="value">100.0</property>
-                                      </object>
-                                    </property>
-                                    <property name="margin-top">0</property>
-                                    <property name="margin-bottom">0</property>
-                                    <property name="draw-value">true</property>
-                                    <property name="orientation">horizontal</property>
-                                    <property name="value-pos">bottom</property>
-                                    <property name="width-request">130</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">center</property>
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">10</property>
-                            <property name="margin-top">10</property>
-                            <property name="margin-bottom">10</property>
-                            <property name="vexpand">True</property>
-                            <child>
-                              <object class="GtkScale" id="brightness">
-                                <property name="adjustment">
-                                  <object class="GtkAdjustment">
-                                    <property name="step-increment">0.1</property>
-                                    <property name="upper">200.0</property>
-                                    <property name="value">100.0</property>
-                                  </object>
-                                </property>
-                                <property name="can-focus">False</property>
-                                <property name="draw-value">true</property>
-                                <property name="fill-level">100.0</property>
-                                <property name="hexpand">True</property>
-                                <property name="inverted">True</property>
-                                <property name="orientation">vertical</property>
-                                <property name="restrict-to-fill-level">False</property>
-                                <property name="value-pos">bottom</property>
-                                <property name="vexpand">True</property>
-                                <property name="width-request">130</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="ellipsize">middle</property>
-                                <property name="justify">center</property>
-                                <property name="label">Brightness</property>
-                                <attributes>
-                                  <attribute name="font-desc" value="12" />
-                                </attributes>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="hexpand">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="valign">end</property>
-                    <child>
-                      <object class="AdwCarousel" id="bottom_carousel">
-                        <property name="allow-long-swipes">True</property>
-                        <property name="allow-mouse-drag">True</property>
-                        <property name="halign">baseline</property>
-                        <property name="hexpand">True</property>
-                        <property name="overflow">hidden</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="halign">baseline</property>
                             <property name="hexpand">True</property>
                             <property name="orientation">vertical</property>
-                            <property name="overflow">hidden</property>
-                            <property name="valign">center</property>
-                            <property name="margin-bottom">10</property>
-
+                            <property name="vexpand">True</property>
                             <child>
-                              <object class="GtkButton" id="capture_button">
-                                <property name="halign">center</property>
-                                <property name="height-request">80</property>
-                                <property name="hexpand">False</property>
-                                <property name="valign">center</property>
-                                <property name="width-request">110</property>
+                              <object class="AdwCarouselIndicatorDots">
+                                <property name="carousel">top_carousel</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwCarousel" id="top_carousel">
+                                <property name="allow-long-swipes">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="focusable">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkBox">
                                     <property name="halign">center</property>
-                                    <property name="label"></property>
-                                    <property name="valign">center</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="32" />
-                                    </attributes>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">10</property>
+                                    <property name="margin-top">20</property>
+                                    <property name="margin-bottom">10</property>
+                                    <property name="vexpand">True</property>
+
+                                    <!-- Saturation Control -->
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label">Saturation</property>
+                                            <property name="halign">center</property>
+                                            <attributes>
+                                              <attribute name="font-desc" value="12" />
+                                              <attribute name="weight" value="bold" />
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkScale" id="saturation">
+                                            <property name="adjustment">
+                                              <object class="GtkAdjustment">
+                                                <property name="step-increment">0.1</property>
+                                                <property name="upper">200.0</property>
+                                                <property name="value">100.0</property>
+                                              </object>
+                                            </property>
+                                            <property name="margin-top">0</property>
+                                            <property name="margin-bottom">0</property>
+                                            <property name="draw-value">true</property>
+                                            <property name="orientation">horizontal</property>
+                                            <property name="value-pos">bottom</property>
+                                            <property name="width-request">130</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+
+                                    <!-- Contrast Control -->
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label">Contrast</property>
+                                            <property name="halign">center</property>
+                                            <attributes>
+                                              <attribute name="font-desc" value="12" />
+                                              <attribute name="weight" value="bold" />
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkScale" id="contrast">
+                                            <property name="adjustment">
+                                              <object class="GtkAdjustment">
+                                                <property name="step-increment">0.1</property>
+                                                <property name="upper">200.0</property>
+                                                <property name="value">100.0</property>
+                                              </object>
+                                            </property>
+                                            <property name="margin-top">0</property>
+                                            <property name="margin-bottom">0</property>
+                                            <property name="draw-value">true</property>
+                                            <property name="orientation">horizontal</property>
+                                            <property name="value-pos">bottom</property>
+                                            <property name="width-request">130</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+
+                                    <!-- Sharpness Control -->
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label">Sharpness</property>
+                                            <property name="halign">center</property>
+                                            <attributes>
+                                              <attribute name="font-desc" value="12" />
+                                              <attribute name="weight" value="bold" />
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkScale" id="sharpness">
+                                            <property name="adjustment">
+                                              <object class="GtkAdjustment">
+                                                <property name="step-increment">0.1</property>
+                                                <property name="upper">200.0</property>
+                                                <property name="value">100.0</property>
+                                              </object>
+                                            </property>
+                                            <property name="margin-top">0</property>
+                                            <property name="margin-bottom">0</property>
+                                            <property name="draw-value">true</property>
+                                            <property name="orientation">horizontal</property>
+                                            <property name="value-pos">bottom</property>
+                                            <property name="width-request">130</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
-                                <style>
-                                  <class name="circular" />
-                                </style>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="halign">center</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">10</property>
+                                    <property name="margin-top">10</property>
+                                    <property name="margin-bottom">10</property>
+                                    <property name="vexpand">True</property>
+                                    <child>
+                                      <object class="GtkScale" id="brightness">
+                                        <property name="adjustment">
+                                          <object class="GtkAdjustment">
+                                            <property name="step-increment">0.1</property>
+                                            <property name="upper">200.0</property>
+                                            <property name="value">100.0</property>
+                                          </object>
+                                        </property>
+                                        <property name="can-focus">False</property>
+                                        <property name="draw-value">true</property>
+                                        <property name="fill-level">100.0</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="inverted">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="restrict-to-fill-level">False</property>
+                                        <property name="value-pos">bottom</property>
+                                        <property name="vexpand">True</property>
+                                        <property name="width-request">130</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="ellipsize">middle</property>
+                                        <property name="justify">center</property>
+                                        <property name="label">Brightness</property>
+                                        <attributes>
+                                          <attribute name="font-desc" value="12" />
+                                        </attributes>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                         <child>
                           <object class="GtkBox">
-                            <property name="can-focus">False</property>
-                            <property name="halign">baseline</property>
+                            <property name="hexpand">True</property>
                             <property name="orientation">vertical</property>
-                            <property name="overflow">hidden</property>
-                            <property name="valign">center</property>
+                            <property name="valign">end</property>
                             <child>
-                              <object class="GtkToggleButton" id="record_button">
-                                <property name="halign">center</property>
-                                <property name="height-request">80</property>
-                                <property name="hexpand">False</property>
-                                <property name="valign">center</property>
-                                <property name="width-request">110</property>
+                              <object class="AdwCarousel" id="bottom_carousel">
+                                <property name="allow-long-swipes">True</property>
+                                <property name="allow-mouse-drag">True</property>
+                                <property name="halign">baseline</property>
+                                <property name="hexpand">True</property>
+                                <property name="overflow">hidden</property>
                                 <child>
-                                  <object class="GtkLabel">
-                                    <property name="halign">center</property>
-                                    <property name="label"></property>
+                                  <object class="GtkBox">
+                                    <property name="halign">baseline</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="overflow">hidden</property>
                                     <property name="valign">center</property>
-                                    <attributes>
-                                      <attribute name="font-desc" value="32" />
-                                    </attributes>
+                                    <property name="margin-bottom">10</property>
+
+                                    <child>
+                                      <object class="GtkButton" id="capture_button">
+                                        <property name="halign">center</property>
+                                        <property name="height-request">80</property>
+                                        <property name="hexpand">False</property>
+                                        <property name="valign">center</property>
+                                        <property name="width-request">110</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="halign">center</property>
+                                            <property name="label"></property>
+                                            <property name="valign">center</property>
+                                            <attributes>
+                                              <attribute name="font-desc" value="32" />
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="circular" />
+                                        </style>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
-                                <style>
-                                  <class name="pill" />
-                                  <class name="text-button" />
-                                </style>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">baseline</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="overflow">hidden</property>
+                                    <property name="valign">center</property>
+                                    <child>
+                                      <object class="GtkToggleButton" id="record_button">
+                                        <property name="halign">center</property>
+                                        <property name="height-request">80</property>
+                                        <property name="hexpand">False</property>
+                                        <property name="valign">center</property>
+                                        <property name="width-request">110</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="halign">center</property>
+                                            <property name="label"></property>
+                                            <property name="valign">center</property>
+                                            <attributes>
+                                              <attribute name="font-desc" value="32" />
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="pill" />
+                                          <class name="text-button" />
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="halign">baseline</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="overflow">hidden</property>
+                                    <property name="valign">center</property>
+                                    <property name="margin-bottom">10</property>
+
+                                    <child>
+                                      <object class="GtkButton" id="gallery_button">
+                                        <property name="halign">center</property>
+                                        <property name="height-request">80</property>
+                                        <property name="hexpand">False</property>
+                                        <property name="valign">center</property>
+                                        <property name="width-request">110</property>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="halign">center</property>
+                                            <property name="label">🖼</property>
+                                            <property name="valign">center</property>
+                                            <attributes>
+                                              <attribute name="font-desc" value="32" />
+                                            </attributes>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="circular" />
+                                        </style>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="AdwCarouselIndicatorDots">
+                                <property name="carousel">bottom_carousel</property>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
                     </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            
+            <!-- Gallery View -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">gallery</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    
+                    <!-- Gallery Header -->
                     <child>
-                      <object class="AdwCarouselIndicatorDots">
-                        <property name="carousel">bottom_carousel</property>
+                      <object class="AdwHeaderBar" id="gallery_header">
+                        <property name="title-widget">
+                          <object class="GtkLabel">
+                            <property name="label">Gallery</property>
+                            <attributes>
+                              <attribute name="weight" value="bold" />
+                              <attribute name="font-desc" value="16" />
+                            </attributes>
+                          </object>
+                        </property>
+                        <child type="start">
+                          <object class="GtkButton" id="back_to_camera_button">
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="tooltip-text">Back to Camera</property>
+                            <style>
+                              <class name="flat" />
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    
+                    <!-- Gallery Grid -->
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="margin-start">10</property>
+                        <property name="margin-end">10</property>
+                        <property name="margin-top">10</property>
+                        <property name="margin-bottom">10</property>
+                        <child>
+                          <object class="GtkFlowBox" id="gallery_grid">
+                            <property name="max-children-per-line">3</property>
+                            <property name="min-children-per-line">3</property>
+                            <property name="row-spacing">10</property>
+                            <property name="column-spacing">10</property>
+                            <property name="homogeneous">True</property>
+                            <property name="selection-mode">none</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
+              </object>
+            </child>
+            
+            <!-- Full Screen View -->
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">fullscreen</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    
+                    <!-- Fullscreen Header -->
+                    <child>
+                      <object class="AdwHeaderBar" id="fullscreen_header">
+                        <child type="start">
+                          <object class="GtkButton" id="back_to_gallery_button">
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="tooltip-text">Back to Gallery</property>
+                            <style>
+                              <class name="flat" />
+                            </style>
+                          </object>
+                        </child>
+                        <child type="end">
+                          <object class="GtkButton" id="delete_button">
+                            <property name="icon-name">user-trash-symbolic</property>
+                            <property name="tooltip-text">Delete</property>
+                            <style>
+                              <class name="flat" />
+                              <class name="destructive-action" />
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    
+                    <!-- Fullscreen Content -->
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        
+                        <!-- Previous Button -->
+                        <child>
+                          <object class="GtkButton" id="prev_button">
+                            <property name="icon-name">go-previous-symbolic</property>
+                            <property name="valign">center</property>
+                            <property name="margin-start">20</property>
+                            <property name="height-request">60</property>
+                            <property name="width-request">60</property>
+                            <style>
+                              <class name="circular" />
+                              <class name="osd" />
+                            </style>
+                          </object>
+                        </child>
+                        
+                        <!-- Media Display -->
+                        <child>
+                          <object class="GtkBox">
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkPicture" id="fullscreen_image">
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="keep-aspect-ratio">True</property>
+                                <property name="can-shrink">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        
+                        <!-- Next Button -->
+                        <child>
+                          <object class="GtkButton" id="next_button">
+                            <property name="icon-name">go-next-symbolic</property>
+                            <property name="valign">center</property>
+                            <property name="margin-end">20</property>
+                            <property name="height-request">60</property>
+                            <property name="width-request">60</property>
+                            <style>
+                              <class name="circular" />
+                              <class name="osd" />
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
           </object>
