@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.96.1 -->
+<interface>
+  <!-- interface-name camera.ui -->
+  <requires lib="Adw" version="1.0" />
+  <requires lib="gtk" version="4.0" />
+  <requires lib="libadwaita" version="1.7" />
+  <object class="AdwApplicationWindow" id="main_window">
+    <child>
+      <object class="AdwToastOverlay" id="toast_overlay">
+        <child>
+          <object class="GtkBox">
+            <property name="hexpand">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkPicture" id="viewfinder" />
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">True</property>
+                <property name="orientation">vertical</property>
+                <property name="vexpand">True</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="AdwCarouselIndicatorDots">
+                        <property name="carousel">top_carousel</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwCarousel" id="top_carousel">
+                        <property name="allow-long-swipes">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="focusable">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="halign">center</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">10</property>
+                            <property name="margin-top">20</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="vexpand">True</property>
+
+                            <!-- Saturation Control -->
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">Saturation</property>
+                                    <property name="halign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="12" />
+                                      <attribute name="weight" value="bold" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkScale" id="saturation">
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment">
+                                        <property name="step-increment">0.1</property>
+                                        <property name="upper">200.0</property>
+                                        <property name="value">100.0</property>
+                                      </object>
+                                    </property>
+                                    <property name="margin-top">0</property>
+                                    <property name="margin-bottom">0</property>
+                                    <property name="draw-value">true</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="value-pos">bottom</property>
+                                    <property name="width-request">130</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+
+                            <!-- Contrast Control -->
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">Contrast</property>
+                                    <property name="halign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="12" />
+                                      <attribute name="weight" value="bold" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkScale" id="contrast">
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment">
+                                        <property name="step-increment">0.1</property>
+                                        <property name="upper">200.0</property>
+                                        <property name="value">100.0</property>
+                                      </object>
+                                    </property>
+                                    <property name="margin-top">0</property>
+                                    <property name="margin-bottom">0</property>
+                                    <property name="draw-value">true</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="value-pos">bottom</property>
+                                    <property name="width-request">130</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+
+                            <!-- Sharpness Control -->
+                            <child>
+                              <object class="GtkBox">
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label">Sharpness</property>
+                                    <property name="halign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="12" />
+                                      <attribute name="weight" value="bold" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkScale" id="sharpness">
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment">
+                                        <property name="step-increment">0.1</property>
+                                        <property name="upper">200.0</property>
+                                        <property name="value">100.0</property>
+                                      </object>
+                                    </property>
+                                    <property name="margin-top">0</property>
+                                    <property name="margin-bottom">0</property>
+                                    <property name="draw-value">true</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="value-pos">bottom</property>
+                                    <property name="width-request">130</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="halign">center</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="vexpand">True</property>
+                            <child>
+                              <object class="GtkScale" id="brightness">
+                                <property name="adjustment">
+                                  <object class="GtkAdjustment">
+                                    <property name="step-increment">0.1</property>
+                                    <property name="upper">200.0</property>
+                                    <property name="value">100.0</property>
+                                  </object>
+                                </property>
+                                <property name="can-focus">False</property>
+                                <property name="draw-value">true</property>
+                                <property name="fill-level">100.0</property>
+                                <property name="hexpand">True</property>
+                                <property name="inverted">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="restrict-to-fill-level">False</property>
+                                <property name="value-pos">bottom</property>
+                                <property name="vexpand">True</property>
+                                <property name="width-request">130</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="ellipsize">middle</property>
+                                <property name="justify">center</property>
+                                <property name="label">Brightness</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="12" />
+                                </attributes>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="hexpand">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="valign">end</property>
+                    <child>
+                      <object class="AdwCarousel" id="bottom_carousel">
+                        <property name="allow-long-swipes">True</property>
+                        <property name="allow-mouse-drag">True</property>
+                        <property name="halign">baseline</property>
+                        <property name="hexpand">True</property>
+                        <property name="overflow">hidden</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="halign">baseline</property>
+                            <property name="hexpand">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="overflow">hidden</property>
+                            <property name="valign">center</property>
+                            <property name="margin-bottom">10</property>
+
+                            <child>
+                              <object class="GtkButton" id="capture_button">
+                                <property name="halign">center</property>
+                                <property name="height-request">80</property>
+                                <property name="hexpand">False</property>
+                                <property name="valign">center</property>
+                                <property name="width-request">110</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">center</property>
+                                    <property name="label"></property>
+                                    <property name="valign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="32" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="circular" />
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="can-focus">False</property>
+                            <property name="halign">baseline</property>
+                            <property name="orientation">vertical</property>
+                            <property name="overflow">hidden</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkToggleButton" id="record_button">
+                                <property name="halign">center</property>
+                                <property name="height-request">80</property>
+                                <property name="hexpand">False</property>
+                                <property name="valign">center</property>
+                                <property name="width-request">110</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="halign">center</property>
+                                    <property name="label"></property>
+                                    <property name="valign">center</property>
+                                    <attributes>
+                                      <attribute name="font-desc" value="32" />
+                                    </attributes>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="pill" />
+                                  <class name="text-button" />
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwCarouselIndicatorDots">
+                        <property name="carousel">bottom_carousel</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
