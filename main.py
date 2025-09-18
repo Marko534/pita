@@ -14,7 +14,11 @@ from picamera2.outputs import FfmpegOutput
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Adw, GdkPixbuf, GLib, Pango, Gio
+gi.require_version("Gst", "1.0")  # Add GStreamer for video playback
+from gi.repository import Gtk, Adw, GdkPixbuf, GLib, Pango, Gio, Gst
+
+# Initialize GStreamer
+Gst.init(None)
 
 
 class CameraApp(Adw.Application):
@@ -43,6 +47,7 @@ class CameraApp(Adw.Application):
         self.main_stack = None
         self.gallery_grid = None
         self.fullscreen_image = None
+        self.fullscreen_video = None  # Add video widget
         self.gallery_button = None
         self.back_to_camera_button = None
         self.back_to_gallery_button = None
@@ -53,6 +58,10 @@ class CameraApp(Adw.Application):
         # Gallery state
         self.media_files = []
         self.current_media_index = 0
+
+        # Video playback
+        self.video_pipeline = None
+        self.is_playing_video = False
 
         self.running = False
         self.executor = ThreadPoolExecutor(
@@ -103,6 +112,9 @@ class CameraApp(Adw.Application):
         self.next_button = builder.get_object("next_button")
         self.next_button.connect("clicked", self.on_next_clicked)
         
+        # Create video widget for fullscreen playback
+        self.create_video_widget()
+        
         # Get slider widgets and connect them
         self.saturation_slider = builder.get_object("saturation")
         self.contrast_slider = builder.get_object("contrast")
@@ -128,6 +140,11 @@ class CameraApp(Adw.Application):
         self.window.present()
         self.window.fullscreen()
 
+    def create_video_widget(self):
+        """Create GStreamer video widget for fullscreen playback"""
+        # We'll create this dynamically when needed since we need to embed it in the fullscreen view
+        pass
+
     def on_key_pressed(self, controller, keyval, keycode, state):
         """Handle keyboard navigation"""
         current_view = self.main_stack.get_visible_child_name()
@@ -141,6 +158,10 @@ class CameraApp(Adw.Application):
                 return True
             elif keyval == 65307:  # Escape
                 self.on_back_to_gallery_clicked(None)
+                return True
+            elif keyval == 32:  # Space bar - play/pause video
+                if self.is_playing_video:
+                    self.toggle_video_playback()
                 return True
         elif current_view == "gallery":
             if keyval == 65307:  # Escape
@@ -157,10 +178,12 @@ class CameraApp(Adw.Application):
 
     def on_back_to_camera_clicked(self, button):
         """Switch back to camera view"""
+        self.stop_video_playback()  # Stop any video playback
         self.main_stack.set_visible_child_name("camera")
 
     def on_back_to_gallery_clicked(self, button):
         """Switch back to gallery from fullscreen"""
+        self.stop_video_playback()  # Stop any video playback
         self.main_stack.set_visible_child_name("gallery")
 
     def load_gallery(self):
@@ -205,12 +228,17 @@ class CameraApp(Adw.Application):
                 )
                 image = Gtk.Picture.new_for_pixbuf(pixbuf)
             else:
-                # For videos, using a video icon
-                image = Gtk.Image.new_from_icon_name("video-x-generic")
-                image.set_pixel_size(64)
+                # For videos, try to extract first frame as thumbnail
+                thumbnail_pixbuf = self.extract_video_thumbnail(file_path)
+                if thumbnail_pixbuf:
+                    image = Gtk.Picture.new_for_pixbuf(thumbnail_pixbuf)
+                else:
+                    # Fallback to video icon
+                    image = Gtk.Image.new_from_icon_name("video-x-generic")
+                    image.set_pixel_size(64)
                 
                 # Add video indicator
-                video_label = Gtk.Label.new("▶")
+                video_label = Gtk.Label.new("")
                 video_label.set_halign(Gtk.Align.END)
                 video_label.set_valign(Gtk.Align.START)
                 video_label.set_margin_top(5)
@@ -231,6 +259,44 @@ class CameraApp(Adw.Application):
             print(f"Error creating thumbnail for {file_path}: {e}")
             return None
 
+    def extract_video_thumbnail(self, video_path):
+        """Extract first frame from video as thumbnail"""
+        try:
+            cap = cv2.VideoCapture(video_path)
+            ret, frame = cap.read()
+            cap.release()
+            
+            if ret:
+                # Convert BGR to RGB
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                
+                # Resize to thumbnail size
+                height, width = frame_rgb.shape[:2]
+                aspect = width / height
+                if aspect > 200/150:  # wider than thumbnail
+                    new_width = 200
+                    new_height = int(200 / aspect)
+                else:  # taller than thumbnail
+                    new_height = 150
+                    new_width = int(150 * aspect)
+                
+                frame_resized = cv2.resize(frame_rgb, (new_width, new_height))
+                
+                # Create pixbuf
+                pixbuf = GdkPixbuf.Pixbuf.new_from_data(
+                    frame_resized.tobytes(),
+                    GdkPixbuf.Colorspace.RGB,
+                    False,
+                    8,
+                    new_width,
+                    new_height,
+                    new_width * 3,
+                )
+                return pixbuf
+        except Exception as e:
+            print(f"Error extracting video thumbnail: {e}")
+        return None
+
     def on_thumbnail_clicked(self, index):
         """Handle thumbnail click - switch to fullscreen view"""
         self.current_media_index = index
@@ -243,16 +309,24 @@ class CameraApp(Adw.Application):
             
         file_path = self.media_files[self.current_media_index]
         
+        # Stop any existing video playback first
+        self.stop_video_playback()
+        
         try:
             if file_path.endswith('.jpg'):
                 # Load and display image
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file(file_path)
                 self.fullscreen_image.set_pixbuf(pixbuf)
+                self.fullscreen_image.set_visible(True)
+                
+                # Make sure video widget is hidden
+                if hasattr(self, 'fullscreen_video') and self.fullscreen_video:
+                    self.fullscreen_video.set_visible(False)
+                    
+                self.is_playing_video = False
             else:
-                # For videos, show a placeholder for now
-                # In a full implementation, you might want to use GStreamer for video playback
-                pixbuf = GdkPixbuf.Pixbuf.new_from_icon_name("video-x-generic")
-                self.fullscreen_image.set_pixbuf(pixbuf)
+                # For videos, set up video playback
+                self.setup_video_playback(file_path)
                 
         except Exception as e:
             print(f"Error loading media {file_path}: {e}")
@@ -262,6 +336,91 @@ class CameraApp(Adw.Application):
         
         # Switch to fullscreen view
         self.main_stack.set_visible_child_name("fullscreen")
+
+    def setup_video_playback(self, video_path):
+        """Set up video playback by replacing the image widget temporarily"""
+        try:
+            # Get the parent container of the fullscreen_image
+            parent = self.fullscreen_image.get_parent()
+            
+            if not parent:
+                print("Could not find parent container for video playback")
+                return
+                
+            # Hide image widget
+            self.fullscreen_image.set_visible(False)
+            
+            # Create video widget if it doesn't exist
+            if not hasattr(self, 'fullscreen_video') or not self.fullscreen_video:
+                self.fullscreen_video = Gtk.Video()
+                self.fullscreen_video.set_hexpand(True)
+                self.fullscreen_video.set_vexpand(True)
+                self.fullscreen_video.set_halign(Gtk.Align.CENTER)
+                self.fullscreen_video.set_valign(Gtk.Align.CENTER)
+                
+                # Add the video widget to the same parent as the image
+                parent.append(self.fullscreen_video)
+            
+            # Set video file and show widget
+            video_file = Gio.File.new_for_path(os.path.abspath(video_path))
+            self.fullscreen_video.set_file(video_file)
+            self.fullscreen_video.set_visible(True)
+            
+            # Set autoplay
+            self.fullscreen_video.set_autoplay(True)
+            self.fullscreen_video.set_loop(False)
+            
+            self.is_playing_video = True
+            
+            print(f"Playing video: {video_path}")
+            
+        except Exception as e:
+            print(f"Error setting up video playback: {e}")
+            # Fallback to showing video thumbnail
+            try:
+                thumbnail_pixbuf = self.extract_video_thumbnail(video_path)
+                if thumbnail_pixbuf:
+                    # Scale thumbnail to fit fullscreen
+                    window_size = self.window.get_default_size()
+                    if window_size[0] > 0 and window_size[1] > 0:
+                        scaled_pixbuf = thumbnail_pixbuf.scale_simple(
+                            min(800, window_size[0] - 100),
+                            min(600, window_size[1] - 100),
+                            GdkPixbuf.InterpType.BILINEAR
+                        )
+                        self.fullscreen_image.set_pixbuf(scaled_pixbuf)
+                    else:
+                        self.fullscreen_image.set_pixbuf(thumbnail_pixbuf)
+                else:
+                    # Final fallback to video icon
+                    icon_pixbuf = GdkPixbuf.Pixbuf.new_from_icon_name("video-x-generic", 128)
+                    self.fullscreen_image.set_pixbuf(icon_pixbuf)
+                    
+                self.fullscreen_image.set_visible(True)
+                self.is_playing_video = False
+            except Exception as fallback_error:
+                print(f"Fallback error: {fallback_error}")
+                self.fullscreen_image.set_visible(True)
+                self.is_playing_video = False
+
+    def stop_video_playback(self):
+        """Stop video playback and clean up"""
+        if hasattr(self, 'fullscreen_video') and self.fullscreen_video and self.is_playing_video:
+            try:
+                self.fullscreen_video.set_file(None)
+                self.fullscreen_video.set_visible(False)
+                self.is_playing_video = False
+                
+                # Show the image widget again
+                self.fullscreen_image.set_visible(True)
+            except Exception as e:
+                print(f"Error stopping video: {e}")
+
+    def toggle_video_playback(self):
+        """Toggle video play/pause (if implemented in future)"""
+        # Gtk.Video doesn't have direct play/pause control in GTK4
+        # This is a placeholder for future implementation
+        pass
 
     def update_navigation_buttons(self):
         """Update the state of navigation buttons"""
@@ -307,15 +466,23 @@ class CameraApp(Adw.Application):
         """Handle delete confirmation response"""
         if response == "delete":
             try:
+                # Stop video playback if it's a video file
+                self.stop_video_playback()
+                
+                # Delete the file
                 os.remove(file_path)
                 self.show_toast(f"Deleted {os.path.basename(file_path)}")
                 
                 # Remove from media files list
                 self.media_files.remove(file_path)
                 
+                # Always refresh gallery to ensure consistency
+                # We need to do this before navigation to ensure the gallery is updated
+                GLib.idle_add(self.load_gallery)
+                
                 # Handle navigation after deletion
                 if not self.media_files:
-                    # No more files, go back to gallery
+                    # No more files, go back to gallery (which will be empty)
                     self.on_back_to_gallery_clicked(None)
                 else:
                     # Adjust current index if necessary
@@ -531,7 +698,7 @@ class CameraApp(Adw.Application):
             style_context.add_class("text-button")
 
             # Set record symbol with smaller font
-            label.set_text("")
+            label.set_text("")
             attr_list = Pango.AttrList()
             size_attr = Pango.attr_size_new(32 * Pango.SCALE)
             attr_list.insert(size_attr)
@@ -568,6 +735,9 @@ class CameraApp(Adw.Application):
         if self.timer_id:
             GLib.source_remove(self.timer_id)
             self.timer_id = 0
+
+        # Stop video playback
+        self.stop_video_playback()
             
         if self.picam2 and self.recording:
             try:
